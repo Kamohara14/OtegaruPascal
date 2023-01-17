@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "Face_Worst.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
