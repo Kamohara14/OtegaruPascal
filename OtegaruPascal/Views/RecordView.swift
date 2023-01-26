@@ -12,7 +12,7 @@ struct RecordView: View {
     @StateObject private var viewModel = RecordViewModel()
     
     // テキストの大きさ
-    let fontSize: Font
+    private let fontSize: Font
     
     init() {
         self.fontSize = getFontSize(view: .homeView)

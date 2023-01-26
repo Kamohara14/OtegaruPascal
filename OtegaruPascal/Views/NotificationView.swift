@@ -15,11 +15,11 @@ struct NotificationView: View {
     @ObservedObject var mainViewModel: MainViewModel
     
     // テキストの大きさ
-    let fontSize: Font
+    private let fontSize: Font
     
     init(mainViewModel: MainViewModel) {
         self.mainViewModel = mainViewModel
-        self.fontSize = getFontSize(view: .notificationView)
+        self.fontSize = getFontSize(view: .settingView)
     }
     
     var body: some View {

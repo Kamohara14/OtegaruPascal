@@ -46,8 +46,7 @@ struct WeatherRequest: APIRequestType {
             .init(name: "units", value: "metric"),
             // 言語(日本語)
             .init(name: "lang", value: "ja"),
-            // APIKey
-            //.init(name: "appid", value: "91eaa4d57444ba4830a20c875ac4b764")
+            // APIKey(Configから取ってくる)
             .init(name: "appid", value: infoForKey("OpenWeatherAPIKey"))
         ]
     }

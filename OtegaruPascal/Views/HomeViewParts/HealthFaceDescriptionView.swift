@@ -17,7 +17,7 @@ struct HealthFaceDescriptionView: View {
     init(isPresented: Binding<Bool>) {
         // Bindingであるため「 _ 」が必要
         self._isPresented = isPresented
-        self.fontSize = getFontSize(view: .notificationView)
+        self.fontSize = getFontSize(view: .settingView)
     }
     
     var body: some View {
@@ -28,8 +28,6 @@ struct HealthFaceDescriptionView: View {
             VStack {
                 // 通知を閉じるためのボタン
                 HStack {
-                    Spacer()
-                    
                     // 閉じるボタン
                     Button {
                         // 解説を閉じる
@@ -42,7 +40,8 @@ struct HealthFaceDescriptionView: View {
                             .frame(width: 30, height: 30)
                     }
                     
-                }
+                    Spacer()
+                } // HS
                 
                 // 区切り線
                 Divider()

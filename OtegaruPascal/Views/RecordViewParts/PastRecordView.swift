@@ -79,7 +79,7 @@ struct PastRecordParts: View {
     // ViewModel
     @ObservedObject var viewModel: RecordViewModel
     // 通知と同じサイズ
-    private let fontSize = getFontSize(view: .notificationView)
+    private let fontSize = getFontSize(view: .settingView)
     
     var body: some View {
         ForEach (0..<viewModel.recordArray.count, id: \.self) { num in

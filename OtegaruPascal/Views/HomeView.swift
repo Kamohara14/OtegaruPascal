@@ -45,7 +45,7 @@ struct HomeView: View {
                             
                             Spacer()
                         }
-                        WeatherView(viewModel: viewModel)
+                        WeatherView(viewModel: viewModel, isForecast: false)
                             .cornerRadius(30)
                     } // VS
                     
@@ -60,7 +60,7 @@ struct HomeView: View {
                             
                             Spacer()
                         }
-                        WeatherForecastView(viewModel: viewModel)
+                        WeatherView(viewModel: viewModel, isForecast: true)
                             .cornerRadius(30)
                     } // VS
                     

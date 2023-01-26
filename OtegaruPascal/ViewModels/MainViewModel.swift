@@ -31,9 +31,9 @@ final class MainViewModel: ObservableObject {
 // MARK: - FontSizeType
 // Viewの種類
 enum Views {
-    // 通知
-    case notificationView
-    // ホーム
+    // 設定・通知
+    case settingView
+    // ホーム画面関連
     case homeView
     // 体調表示
     case healthFaceView
@@ -58,7 +58,8 @@ func getFontSize(view: Views) -> Font {
     }
     
     switch view {
-    case .notificationView:
+    case .settingView:
+        // 通知画面
         if(isPad) {
             return Font.title
             
@@ -67,6 +68,7 @@ func getFontSize(view: Views) -> Font {
         }
         
     case .homeView:
+        // ホーム画面
         if(isPad) {
             return Font.largeTitle
             
@@ -95,6 +97,7 @@ func getFontSize(view: Views) -> Font {
 }
 
 // MARK: - getFrameSize
+// 使用しているiPhoneもしくはiPadのフレームを取得する
 func getFrameSize() -> (w: CGFloat, h: CGFloat) {
     // iPadかどうか判定
     if Int(UIScreen.main.bounds.width) >= 700 {

@@ -35,6 +35,7 @@ final class RecordViewModel: ObservableObject {
     }
     
     // MARK: - addRecord
+    // TODO: 記録の追加は1日に1回にする
     func addRecord() {
         // 配列に記録を追加する
         recordManager.addRecord(evaluation: evaluation)

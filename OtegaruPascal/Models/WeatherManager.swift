@@ -21,6 +21,16 @@ struct WeatherInput: Identifiable {
     let main: WeatherType
     // 天気の解説(日本語)
     let description: String
+    // 湿度(%)
+    let humidity: Double
+    // UV指数
+    let uvi: Double
+    // 曇り度(%)
+    let clouds: Int
+    // 風速(m/s)
+    let windSpeed: Double
+    // 降水確率(0~1) *0が0%で、1が100%
+    let pop: Double
 }
 
 final class WeatherManager: ObservableObject {
@@ -49,8 +59,9 @@ final class WeatherManager: ObservableObject {
     private var cancellable = Set<AnyCancellable>()
     
     // 表示するデータ
-    private(set) var weatherInput: (WeatherInput, WeatherInput) = (WeatherInput(dt: 0, temp: 15.0, main: .not, description: ""),
-                                                                   WeatherInput(dt: 0, temp: 15.0, main: .not, description: ""))
+    private(set) var weatherInput: (WeatherInput, WeatherInput) = (
+        WeatherInput(dt: 0, temp: 15.0, main: .not, description: "", humidity: 0.0, uvi: 0.0, clouds: 0, windSpeed: 0.0, pop: 0.0),
+        WeatherInput(dt: 0, temp: 15.0, main: .not, description: "", humidity: 0.0, uvi: 0.0, clouds: 0, windSpeed: 0.0, pop: 0.0))
     // 年間の平均温度
     private var tempArray: [Double] = [5.4, 6.1, 9.4, 14.3, 18.8, 21.9, 25.7, 26.9, 23.3, 18.0, 12.5, 7.7]
     // 温度
@@ -90,6 +101,7 @@ final class WeatherManager: ObservableObject {
     }
     
     // MARK: - isNetwork
+    // ネットワークが使用可能か確認する
     private func isCheckNetwork(){
         // モニター
         let monitor = NWPathMonitor()
@@ -114,6 +126,7 @@ final class WeatherManager: ObservableObject {
     }
     
     // MARK: - bind
+    // Combineを使用した別スレッドの処理
     private func bind() {
         responseSubject
             .flatMap { weatherRequest in
@@ -135,7 +148,8 @@ final class WeatherManager: ObservableObject {
     }
     
     // MARK: - updateWeather
-    func updateWeather(handler: @escaping (WeatherIcon, WeatherIcon) -> Void) {
+    // 一定間隔で天気を取得し、結果をHomeViewに返す
+    func updateWeather(handler: @escaping (WeatherInput, WeatherInput) -> Void) {
         // 通信できる時のみ実行
         if isNetwork {
             // 緯度経度を渡してAPIを取る
@@ -143,8 +157,8 @@ final class WeatherManager: ObservableObject {
             // APIが取れたら
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                 // 天気を取得
-                let weather: WeatherIcon = WeatherIcon(type: self.weatherInput.0.main)
-                let weatherForcast: WeatherIcon = WeatherIcon(type:self.weatherInput.1.main)
+                let weather: WeatherInput = self.weatherInput.0
+                let weatherForcast: WeatherInput = self.weatherInput.1
                 print("2: \(self.weatherInput.0.main) -> \(self.weatherInput.1.main)")
                 
                 // 天気を返す
@@ -159,8 +173,8 @@ final class WeatherManager: ObservableObject {
                 // APIが取れたら
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                     // 天気を取得
-                    let weather: WeatherIcon = WeatherIcon(type: self.weatherInput.0.main)
-                    let weatherForcast: WeatherIcon = WeatherIcon(type:self.weatherInput.1.main)
+                    let weather: WeatherInput = self.weatherInput.0
+                    let weatherForcast: WeatherInput = self.weatherInput.1
                     print("2: \(self.weatherInput.0.main) -> \(self.weatherInput.1.main)")
                     
                     // 天気を返す
@@ -180,11 +194,12 @@ final class WeatherManager: ObservableObject {
     }
     
     // MARK: - convertInput
+    // 取得した天気情報を代入する
     private func convertInput(response: WeatherResponse) {
         // 現在の天気情報
-        var currentInputs = WeatherInput(dt: 0, temp: 15.0, main: .not, description: "エラー")
+        var currentInputs = WeatherInput(dt: 0, temp: 15.0, main: .not, description: "エラー", humidity: 0.0, uvi: 0.0, clouds: 0, windSpeed: 0.0, pop: 0.0)
         // 1時間後の天気情報
-        var forcastInputs = WeatherInput(dt: 0, temp: 15.0, main: .not, description: "エラー")
+        var forcastInputs = WeatherInput(dt: 0, temp: 15.0, main: .not, description: "エラー", humidity: 0.0, uvi: 0.0, clouds: 0, windSpeed: 0.0, pop: 0.0)
         
         // 取ってきたデータがあるなら
         if let currentData = response.hourly?[0],
@@ -197,12 +212,24 @@ final class WeatherManager: ObservableObject {
             currentInputs = WeatherInput(
                 dt: currentData.dt, temp: currentData.temp,
                 main: currentData.weather[0].main,
-                description: currentData.weather[0].description)
+                description: currentData.weather[0].description,
+                humidity: currentData.humidity,
+                uvi: currentData.uvi,
+                clouds: currentData.clouds,
+                windSpeed: currentData.windSpeed,
+                pop: currentData.pop
+            )
             
             forcastInputs = WeatherInput(
                 dt: forcastData.dt, temp: forcastData.temp,
                 main: forcastData.weather[0].main,
-                description: forcastData.weather[0].description)
+                description: forcastData.weather[0].description,
+                humidity: forcastData.humidity,
+                uvi: forcastData.uvi,
+                clouds: forcastData.clouds,
+                windSpeed: forcastData.windSpeed,
+                pop: currentData.pop
+            )
         }
         // 天気を取得
         self.weatherInput = (currentInputs, forcastInputs)
@@ -211,6 +238,7 @@ final class WeatherManager: ObservableObject {
     }
     
     // MARK: - apply
+    // 別スレッドの処理を行う
     private func apply(input: WeatherInputs) {
         switch input {
         case .onCommit(lat: let lat, lon: let lon):
@@ -221,6 +249,7 @@ final class WeatherManager: ObservableObject {
     
     // MARK: - getTemperature
     func getTemperature() -> Double {
+        // 温度を返す
         return temperature
         
     }

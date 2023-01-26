@@ -13,7 +13,7 @@ final class HealthManager: ObservableObject {
     
     // Model
     @Published private var notificationManager: NotificationManager = .shared
-    @Published private var settingManager = SettingManager()
+    @Published private var settingManager: SettingManager = .shared
     
     // 過去の気圧の配列(年の平均気圧を時間ごとに入れておく)
     private var pastPressure: [Double] = [
@@ -45,7 +45,7 @@ final class HealthManager: ObservableObject {
     // 更新のためのタイマー
     private var timer: Timer?
     
-    // 現在の時間(最初は必ず更新されるように-1にする) FIXME: 通知の確認が終わり次第UserDefaultsで保存するようにする(Dateで保存を検討)
+    // 現在の時間(最初は必ず更新されるように-1にする) TODO: 通知の確認が終わり次第UserDefaultsで保存するようにする(Dateで保存を検討)
     private var currentDay: Int = -1
     private var currentHour: Int = -1
     private var currentMin: Int = -1
@@ -56,7 +56,12 @@ final class HealthManager: ObservableObject {
     private var isMin = false
     
     // 気圧の差による体調の判断ライン
-    private var healthLine: Double = 1.0
+    private var healthLine: Double = 1.0 {
+        // 変更があれば
+        didSet {
+            UserDefaults.standard.set(healthLine, forKey: "healthLine")
+        }
+    }
     
     // お薬通知の画面表示の有無(デフォルトは非表示)
     private var isDrugNotificationDisplayed: Bool = false
@@ -69,9 +74,17 @@ final class HealthManager: ObservableObject {
                 pastPressure = getData
             }
         }
+        // 体調の判断ラインを入れる(初回起動時は保存されたデータが存在しないため、代入しない)
+        if UserDefaults.standard.double(forKey: "healthLine") != 0.0 {
+            self.healthLine = UserDefaults.standard.double(forKey: "healthLine")
+        }
+        
+        // TODO: 現在の時間を入れる
+        
     }
     
     // MARK: - updateHealth
+    // 一定間隔で体調についての情報を取得し、結果をHomeViewに返す
     func updateHealth(handler: @escaping (FaceType, FaceType, FaceType) -> Void) {
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             // 時間確認
@@ -115,6 +128,7 @@ final class HealthManager: ObservableObject {
     }
     
     // MARK: - forecastHealth
+    // 体調の予測を行う
     func forecastHealth() {
         print("forecast!")
         // 過去の記録と現在の記録の差
@@ -125,11 +139,9 @@ final class HealthManager: ObservableObject {
             pressureDifference = self.pastPressure[21 + self.currentHour] - self.pastPressure[self.currentHour]
             
         } else {
-            print("\(self.pastPressure[self.currentHour])")
             pressureDifference = self.pastPressure[self.currentHour - 3] - self.pastPressure[self.currentHour]
             
         }
-        print("\(self.pastPressure[self.currentHour])")
         
         // 負の数なら
         if pressureDifference < 0 {
@@ -137,7 +149,6 @@ final class HealthManager: ObservableObject {
             pressureDifference = pressureDifference * -1
         }
         
-        // TODO: 精度を高める
         // 気圧の差によって現在の体調を予測する
         if pressureDifference >= (self.healthLine * 6.5)  {
             // 警戒
@@ -186,16 +197,12 @@ final class HealthManager: ObservableObject {
     }
     
     // MARK: - healthNotification
+    // 体調の予測を行った結果から、ユーザに合わせたローカル通知を出す
     private func healthNotification() {
-        // 日付が更新されたら
-        if isDay {
-            // 通知を出せる状態にする
-            isHealthNotification = true
-        }
+        print("isDay = \(isDay)")
         
         // 通知が出せる状態ならば実行
         if isHealthNotification {
-            print("health!")
             // 体調の悪化が予想されるなら
             if forecastFace == .bad || forecastFace == .worst {
                 // 体調悪化の通知を出す
@@ -207,17 +214,21 @@ final class HealthManager: ObservableObject {
                     notificationManager.permitNotification(type: .drug,registeredDrug: settingManager.getRegisteredDrug())
                     // 画面にも通知を表示する
                     isDrugNotificationDisplayed = true
+                    print("healthAndDrug")
+                    
+                } else {
+                    print("health")
                 }
                 
                 // 通知を1日に何度も送らないためにfalseにする
                 isHealthNotification = false
-                
             }
         }
         
     }
     
     // MARK: - changeHealthLine
+    // 体調の指標となるラインをユーザ毎に合わせる
     func changeHealthLine(evaluation: Int) {
         // 現在の体調表示
         var num: Int
@@ -239,21 +250,26 @@ final class HealthManager: ObservableObject {
             break
             
         }
+        
         // 差を計算(ユーザが感じた体調 - 現在の体調)
         num = evaluation - num
         
         // ユーザ:1 アプリ:4 なら-3となり、基準を0.3下げる = 人より気圧に影響されやすい人向けに調整される
         // ユーザ:4 アプリ:1 なら+3となり、基準を0.3上げる = 人より気圧に影響されにくい人向けに調整される
-        let calcNum = healthLine - (Double(num) * 0.1)
+        let calcNum = healthLine + (Double(num) * 0.1)
+        print(" \(healthLine) + \(Double(num) * 0.1) = \(calcNum)")
         
         // 差が大きければ大きいほどユーザに合わせてチューニングする
         // 最低ラインは0、最高ラインは4とする
         if calcNum > 0.0 && 4.0 > calcNum {
             healthLine = calcNum
         }
+        
+        
     }
     
     // MARK: - updateTime
+    // 日付を更新し、日付毎の処理を実行する
     func updateTime() {
         // 日付
         let date = Date()
@@ -270,7 +286,9 @@ final class HealthManager: ObservableObject {
             currentDay = day
             // 更新された
             isDay = true
-            print(" --- 1日経過 --- ")
+            // 通知を出せる状態にする
+            isHealthNotification = true
+            print(" -- 1日経過 -- ")
             
         } else {
             // 更新されていない
@@ -283,7 +301,7 @@ final class HealthManager: ObservableObject {
             currentHour = hour
             // 更新された
             isHour = true
-            print(" --- 1時間経過 --- ")
+            print(" -- 1時間経過 -- ")
             
             // アプリ側の許可ももらえたなら
             if settingManager.getRecordNotification() {
@@ -308,7 +326,7 @@ final class HealthManager: ObservableObject {
             currentMin = min
             // 更新された
             isMin = true
-            print(" --- 1分経過 --- ")
+            print(" -- 1分経過 -- ")
             
         } else {
             // 更新されていない
@@ -318,6 +336,7 @@ final class HealthManager: ObservableObject {
     }
     
     // MARK: - getPressureArrow
+    // 気圧表示の横の矢印を気圧に合わせて調整する
     func getPressureArrow() -> PressureArrowType {
         // 過去の記録と現在の記録の差
         var pressureDifference: Double
@@ -373,6 +392,7 @@ final class HealthManager: ObservableObject {
     
     // MARK: - getIsDrugNotificationDisplayed
     func getIsDrugNotificationDisplayed() -> Bool {
+        // お薬を飲んだかどうかを確認するホーム画面の通知を表示するかどうか
         if isDrugNotificationDisplayed {
             // 一度送ったら元に戻す
             isDrugNotificationDisplayed = false
@@ -388,6 +408,7 @@ final class HealthManager: ObservableObject {
     
     // MARK: - getIsHour
     func getIsHour() -> Bool {
+        // 1時間経ったかどうか
         return isHour
     }
     

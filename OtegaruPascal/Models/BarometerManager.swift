@@ -55,7 +55,7 @@ final class BarometerManager: NSObject, ObservableObject, CLLocationManagerDeleg
     }
     
     // MARK: - updateAltimeter
-    // 気圧を取得し、渡す
+    // 一定間隔で気圧を取得し、結果をHomeViewに返す
     func updateAltimeter(handler: @escaping (Double) -> Void) {
         // 気圧計が使えるかどうか
         guard CMAltimeter.isRelativeAltitudeAvailable() else { return }
@@ -98,7 +98,7 @@ final class BarometerManager: NSObject, ObservableObject, CLLocationManagerDeleg
         return p0
     }
     
-    // MARK: - locationManager
+    // MARK: - locationManagerDidChangeAuthorization
     // 位置情報の認証が変化すると処理が行われる
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         // 体調予想を更新する
@@ -106,6 +106,7 @@ final class BarometerManager: NSObject, ObservableObject, CLLocationManagerDeleg
         healthManager.forecastHealth()
     }
     
+    // MARK: - locationManager
     // 位置情報が更新されるたびに処理が行われる
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         // 最終更新場所の位置情報が取れたなら

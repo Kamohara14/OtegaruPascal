@@ -15,7 +15,7 @@ struct DrugNotificationView: View {
     
     init(viewModel: HomeViewModel) {
         self.viewModel = viewModel
-        self.fontSize = getFontSize(view: .notificationView)
+        self.fontSize = getFontSize(view: .settingView)
     }
     
     var body: some View {
@@ -33,7 +33,7 @@ struct DrugNotificationView: View {
                         .fill(Color("DrugNotification_Title"))
                         .frame(minHeight: 30, maxHeight: 50)
                         .overlay(
-                            Text("お薬を飲みましたか？")
+                            Text(viewModel.drugTitle)
                                 .foregroundColor(Color("Text_Black"))
                                 .font(fontSize)
                         )
@@ -42,18 +42,6 @@ struct DrugNotificationView: View {
                 } // Title
                 
                 HStack {
-                    Spacer()
-                    
-                    // お薬画像
-                    Text("画像")
-                        .foregroundColor(Color("Text_Black"))
-                        .background(
-                            Rectangle()
-                                .fill(Color("DrugNotification_Image"))
-                                .frame(minWidth: 60, minHeight: 60)
-                        )
-                        .padding()
-                    
                     Spacer()
                     
                     // 飲んだボタン

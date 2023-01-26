@@ -10,7 +10,6 @@ import SwiftUI
 struct MainView: View {
     // ViewModel
     @StateObject private var viewModel = MainViewModel()
-    
     // View変更用のイニシャライザ
     init() {
         // NavigationView
@@ -41,6 +40,19 @@ struct MainView: View {
             .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                // MARK: - アプリロゴ
+                ToolbarItem(placement: .navigationBarLeading) {
+                    // Imageでは表示されないため押せないボタンとして表示する
+                    Button {} label: {
+                        Image("Logo")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 74, height: 45)
+                    }.disabled(true)
+                    
+                } // ToolbarItem
+                
+                // 通知・設定ボタン
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     // MARK: - 通知ボタン
                     Button {} label: {
