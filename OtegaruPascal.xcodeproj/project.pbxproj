@@ -18,6 +18,7 @@
 		7F4B048A2902281B00BAF7B4 /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F4B04892902281B00BAF7B4 /* SettingViewModel.swift */; };
 		7F4B048C2902285900BAF7B4 /* WeatherManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F4B048B2902285900BAF7B4 /* WeatherManager.swift */; };
 		7F4B048E29022F7E00BAF7B4 /* SettingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F4B048D29022F7E00BAF7B4 /* SettingManager.swift */; };
+		7F4F7903297781B300968DA2 /* WeatherDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F4F7902297781B300968DA2 /* WeatherDetailView.swift */; };
 		7F61693628F68AAF00B4C82C /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F61693528F68AAF00B4C82C /* MainViewModel.swift */; };
 		7F7EA5582949974C0067329B /* DrugRegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F7EA5572949974C0067329B /* DrugRegistrationView.swift */; };
 		7F7EA55A294997CC0067329B /* RecordTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F7EA559294997CC0067329B /* RecordTimeView.swift */; };
@@ -57,6 +58,7 @@
 		7F4B04892902281B00BAF7B4 /* SettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewModel.swift; sourceTree = "<group>"; };
 		7F4B048B2902285900BAF7B4 /* WeatherManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherManager.swift; sourceTree = "<group>"; };
 		7F4B048D29022F7E00BAF7B4 /* SettingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingManager.swift; sourceTree = "<group>"; };
+		7F4F7902297781B300968DA2 /* WeatherDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailView.swift; sourceTree = "<group>"; };
 		7F61693528F68AAF00B4C82C /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		7F661E112970E1BE009A7C17 /* APIConfig.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = APIConfig.xcconfig; sourceTree = "<group>"; };
 		7F75E4ED2930498500AACC42 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -123,6 +125,14 @@
 				7F41F17C293EE42100BB2B0F /* APIServiceError.swift */,
 			);
 			path = Error;
+			sourceTree = "<group>";
+		};
+		7F4F79012977812200968DA2 /* WeatherViewTransition */ = {
+			isa = PBXGroup;
+			children = (
+				7F4F7902297781B300968DA2 /* WeatherDetailView.swift */,
+			);
+			path = WeatherViewTransition;
 			sourceTree = "<group>";
 		};
 		7F661E122970E20E009A7C17 /* Config */ = {
@@ -240,6 +250,7 @@
 			children = (
 				7FE8834D28F7BC6C006611B3 /* DrugNotificationView.swift */,
 				7FE8834F28F7BCDC006611B3 /* WeatherView.swift */,
+				7F4F79012977812200968DA2 /* WeatherViewTransition */,
 				7FE8835128F7BD22006611B3 /* PressureView.swift */,
 				7FE8835328F7BD4C006611B3 /* HealthFaceView.swift */,
 				7FCEBF9628FF96C00090C073 /* HealthFaceDescriptionView.swift */,
@@ -349,6 +360,7 @@
 				7F7EA5582949974C0067329B /* DrugRegistrationView.swift in Sources */,
 				7FE8835228F7BD22006611B3 /* PressureView.swift in Sources */,
 				7F4B04872900F25000BAF7B4 /* NotificationManager.swift in Sources */,
+				7F4F7903297781B300968DA2 /* WeatherDetailView.swift in Sources */,
 				7FBFB52328EFC34800EDD2B2 /* NotificationView.swift in Sources */,
 				7F61693628F68AAF00B4C82C /* MainViewModel.swift in Sources */,
 			);

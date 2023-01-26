@@ -10,7 +10,7 @@ import SwiftUI
 
 final class SettingViewModel: ObservableObject {
     // Model
-    @Published private var settingManager = SettingManager()
+    @Published private var settingManager: SettingManager = .shared
     
     // MARK: - お薬情報
     // お薬情報を通知するかどうか(デフォルトはON)
@@ -58,6 +58,7 @@ final class SettingViewModel: ObservableObject {
     }
     
     // MARK: - deleteRegisteredDrug
+    // 登録されたお薬を削除する
     func deleteRegisteredDrug() {
         // お薬が登録されていたら
         if registeredDrug != "" {

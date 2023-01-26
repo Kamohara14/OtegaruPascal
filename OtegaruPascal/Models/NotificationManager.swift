@@ -47,6 +47,7 @@ final class NotificationManager: ObservableObject {
     }
     
     // MARK: - permitNotification
+    // 通知の許可をとる
     func permitNotification(type: NotificationType, registeredDrug: String) {
         // 通知のリセット
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
@@ -78,7 +79,7 @@ final class NotificationManager: ObservableObject {
     }
     
     // MARK: - makeNotification
-    // 通知作成
+    // ローカル通知を作成する
     private func makeNotification(type: NotificationType, registeredDrug: String) {
         // 通知タイミング(即時に通知する, 繰り返さない)
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
@@ -110,7 +111,7 @@ final class NotificationManager: ObservableObject {
             
         }
         // タイトル確認
-        print(content.title)
+        print("通知タイトル： \(content.title)")
         // テキスト
         content.body = "タップでAppを開く"
         // サウンド(デフォルト)
@@ -123,7 +124,7 @@ final class NotificationManager: ObservableObject {
     }
     
     // MARK: - addNotification
-    // 通知を追加
+    // 通知画面に通知を追加する
     private func addNotification(type: NotificationType) {
         // 通知の数が最大数を超えたら
         if notificationArray.count > maxNotification {
@@ -186,6 +187,7 @@ final class NotificationManager: ObservableObject {
     }
     
     // MARK: - getIsRead
+    // 未読の有無と、未読の数を返す
     func getIsRead() -> (Bool, Int) {
         // 未読の数
         var unreadNum = 0

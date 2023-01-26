@@ -38,10 +38,10 @@ struct InputRecordView: View {
                             viewModel.selectedButton(buttonNum: .Button1)
                             
                         } label: {
-                            Text("1")
+                            Text("悪い")
                                 .foregroundColor(viewModel.evaluationButton.3.0)
                                 .font(fontSize)
-                                .padding(.horizontal, 30)
+                                .padding(.horizontal, 20)
                                 .background(viewModel.evaluationButton.3.1)
                         } // Button_1
                         .cornerRadius(3)
@@ -59,10 +59,10 @@ struct InputRecordView: View {
                             viewModel.selectedButton(buttonNum: .Button2)
                             
                         } label: {
-                            Text("2")
+                            Text("やや悪い")
                                 .foregroundColor(viewModel.evaluationButton.2.0)
                                 .font(fontSize)
-                                .padding(.horizontal, 30)
+                                .padding(.horizontal, 5)
                                 .background(viewModel.evaluationButton.2.1)
                         } // Button_2
                         .cornerRadius(3)
@@ -80,10 +80,10 @@ struct InputRecordView: View {
                             viewModel.selectedButton(buttonNum: .Button3)
                             
                         } label: {
-                            Text("3")
+                            Text("通常通り")
                                 .foregroundColor(viewModel.evaluationButton.1.0)
                                 .font(fontSize)
-                                .padding(.horizontal, 30)
+                                .padding(.horizontal, 5)
                                 .background(viewModel.evaluationButton.1.1)
                         } // Button_3
                         .cornerRadius(3)
@@ -101,10 +101,10 @@ struct InputRecordView: View {
                             viewModel.selectedButton(buttonNum: .Button4)
                             
                         } label: {
-                            Text("4")
+                            Text("良い")
                                 .foregroundColor(viewModel.evaluationButton.0.0)
                                 .font(fontSize)
-                                .padding(.horizontal, 30)
+                                .padding(.horizontal, 20)
                                 .background(viewModel.evaluationButton.0.1)
                         } // Button_4
                         .cornerRadius(3)

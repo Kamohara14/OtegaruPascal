@@ -21,7 +21,7 @@ final class RecordManager: ObservableObject {
     static let shared: RecordManager = .init()
     
     // Model
-    @Published private var healthManager: HealthManager = .init()
+    @Published private var healthManager: HealthManager = .shared
     @Published private var notificationManager: NotificationManager = .shared
     
     // 記録の配列
@@ -74,6 +74,7 @@ final class RecordManager: ObservableObject {
         
         // 評価を参考に各ユーザ毎に通知のチューニングをする
         healthManager.changeHealthLine(evaluation: evaluation)
+        healthManager.forecastHealth()
     }
     
     // MARK: - saveRecord

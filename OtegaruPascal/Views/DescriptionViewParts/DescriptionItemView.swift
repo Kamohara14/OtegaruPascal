@@ -13,7 +13,7 @@ struct DescriptionItemView: View {
     let text: String
     
     // テキストの大きさ
-    let fontSize: Font
+    private let fontSize: Font
     
     init(title: String, text: String) {
         self.title = title

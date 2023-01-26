@@ -16,6 +16,8 @@ final class HomeViewModel: ObservableObject {
     @Published private var weatherManager: WeatherManager = .shared
     // 体調予測
     @Published private var healthManager: HealthManager = .shared
+    // 設定
+    @Published private var settingManager: SettingManager = .shared
     
     // MARK: - お薬の通知画面
     // お薬の通知の有無(デフォルトは表示しない)
@@ -25,15 +27,43 @@ final class HomeViewModel: ObservableObject {
             UserDefaults.standard.set(isDrugNotificationDisplayed, forKey: "isDrugNotificationDisplayed")
         }
     }
-    // お薬の画像
-    @Published var drugImage: String = ""
+    // お薬の名前
+    @Published var drugTitle: String = "お薬を飲みましたか？"
     
     // MARK: - 天気予報の画面
     // 現在の天気
     @Published var weatherImage: WeatherIcon = WeatherIcon(type: .not)
+    // 現在の天気の解説
+    @Published var weatherDescription: String = "天気"
+    // 現在の気温
+    @Published var temp: String = "気温"
+    // 現在の湿度(%)
+    @Published var humidity: String = "湿度"
+    // 現在のUV指数
+    @Published var uvi: String = "UV指数"
+    // 現在の曇り度(%)
+    @Published var clouds: String = "曇り度"
+    // 現在の風速(m/s)
+    @Published var windSpeed: String = "風速"
+    // 現在の降水確率(0~1) *0が0%で、1が100%
+    @Published var pop: String = "降水確率"
+    
     // 今後の天気
     @Published var weatherForecastImage: WeatherIcon = WeatherIcon(type: .not)
-    
+    // 今後の天気の解説
+    @Published var weatherForecastDescription: String = "天気"
+    // 今後の気温
+    @Published var forecastTemp: String = "気温"
+    // 今後の湿度(%)
+    @Published var forecastHumidity: String = "湿度"
+    // 今後のUV指数
+    @Published var forecastUvi: String = "UV指数"
+    // 今後の曇り度(%)
+    @Published var forecastClouds: String = "曇り度"
+    // 今後の風速(m/s)
+    @Published var forecastWindSpeed: String = "風速"
+    // 今後の降水確率(0~1) *0が0%で、1が100%
+    @Published var forecastPop: String = "降水確率"
     
     // MARK: - 現在の気圧の画面
     // 気圧を文字列にして表示
@@ -42,12 +72,12 @@ final class HomeViewModel: ObservableObject {
     @Published var pressureArrow: PressureArrowIcon = PressureArrowIcon(type: .not)
     
     // MARK: - 表情で体調予想の画面
-    // 過去の体調を表情で表現する(デフォルトはgood)
-    @Published var pastFace: FaceType = .good
-    // 現在の体調を表情で表現する(デフォルトはnormal)
-    @Published var currentFace: FaceType = .normal
-    // 予測された体調を表情で表現する(デフォルトはbad)
-    @Published var forecastFace: FaceType = .bad
+    // 過去の体調を表情で表現する
+    @Published var pastFace: FaceType = .not
+    // 現在の体調を表情で表現する
+    @Published var currentFace: FaceType = .not
+    // 予測された体調を表情で表現する
+    @Published var forecastFace: FaceType = .not
     // 表情の解説の有無
     @Published var isFaceDescriptionDisplayed: Bool = false
     // 現在の体調について一言解説
@@ -59,22 +89,41 @@ final class HomeViewModel: ObservableObject {
         isDrugNotificationDisplayed = UserDefaults.standard.bool(forKey: "isDrugNotificationDisplayed")
         
         // 更新開始
+        // FIXME: API呼び出し回数に制限があるため、何度も起動するテストではupdateWeather()を呼び出さない。本番時には呼び出すよう変更すること。
         updateWeather()
         updateBarometer()
         updateHelth()
     }
     
     // MARK: - updateWeather
+    // 天気の更新を開始する
     func updateWeather() {
         // 天気(緯度経度を渡す)
         self.weatherManager.updateWeather { weather, weatherForcast in
-            // 天気を更新
-            self.weatherImage = weather
-            self.weatherForecastImage = weatherForcast
+            // 現在の天気を更新
+            self.weatherImage = WeatherIcon(type: weather.main)
+            self.weatherDescription = "天候\n\(weather.description)"
+            self.temp = "気温\n\(weather.temp)℃"
+            self.humidity = "湿度\n\(Int(weather.humidity))%"
+            self.uvi = "UV指数\n\(weather.uvi)"
+            self.clouds = "曇り度\n\(Int(weather.clouds))%"
+            self.windSpeed = "風速\n\(weather.windSpeed) m/s"
+            self.pop = "降水確率\n\(Int(weather.pop * 100))%"
+            
+            // 今後の天気を更新
+            self.weatherForecastImage = WeatherIcon(type: weatherForcast.main)
+            self.weatherForecastDescription = "天候\n\(weatherForcast.description)"
+            self.forecastTemp = "気温\n\(weatherForcast.temp)℃"
+            self.forecastHumidity = "湿度\n\(Int(weatherForcast.humidity))%"
+            self.forecastUvi = "UV指数\n\(weatherForcast.uvi)"
+            self.forecastClouds = "曇り度\n\(Int(weatherForcast.clouds))%"
+            self.forecastWindSpeed = "風速\n\(weatherForcast.windSpeed) m/s"
+            self.forecastPop = "降水確率\n\(Int(weatherForcast.pop * 100))%"
         }
     }
     
     // MARK: - updateBarometer
+    // 気圧の更新を開始する
     func updateBarometer() {
         // 気圧計
         self.barometerManager.updateAltimeter { pressure in
@@ -88,6 +137,7 @@ final class HomeViewModel: ObservableObject {
     }
     
     // MARK: - updateHelth
+    // 体調の更新を開始する
     func updateHelth() {
         self.healthManager.updateHealth { past, current, forecast in
             // 過去の体調を取得
@@ -102,8 +152,17 @@ final class HomeViewModel: ObservableObject {
                 // お薬通知の画面表示の有無を受け取る
                 self.isDrugNotificationDisplayed = self.healthManager.getIsDrugNotificationDisplayed()
             }
+            
+            // 登録されているお薬があるなら
+            if self.settingManager.getRegisteredDrug() != "" {
+                // 登録されているお薬の名前を入れる
+                self.drugTitle = "お薬「\(self.settingManager.getRegisteredDrug())」を飲みましたか？"
+            } else {
+                // ないならデフォルト表示
+                self.drugTitle = "お薬を飲みましたか？"
+            }
+            
         }
-        
     }
 
 }
@@ -141,7 +200,7 @@ enum WeatherType: String, Codable {
 // 天気アイコン
 struct WeatherIcon {
     let type: WeatherType
-    let icon: (String, Color, Color)
+    let icon: (image: String, color1: Color, color2: Color)
     
     init(type: WeatherType) {
         self.type = type

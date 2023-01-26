@@ -12,7 +12,7 @@ struct DescriptionView: View {
     @StateObject private var viewModel = DescriptionViewModel()
     
     // テキストの大きさ
-    let fontSize: Font
+    private let fontSize: Font
     
     init() {
         self.fontSize = getFontSize(view: .homeView)
@@ -77,6 +77,8 @@ struct DescriptionView: View {
             .navigationBarHidden(true)
             
         } // NavigationView
+        // iPadに対応する
+        .navigationViewStyle(.stack)
     }
 }
 
