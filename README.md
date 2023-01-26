@@ -1,4 +1,5 @@
 # OtegaruPascal
 2023 Graduation Production
-create -> 1/17
-update -> 1/26
+
+/n create -> 1/17
+/n update -> 1/26
