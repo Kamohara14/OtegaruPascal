@@ -17,7 +17,6 @@ final class NotificationViewModel: ObservableObject {
     init() {
         // 通知を取ってくる
         notificationArray = notificationManager.getNotification()
-        
     }
     
     // MARK: - readNotification

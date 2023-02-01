@@ -16,7 +16,7 @@ final class MainViewModel: ObservableObject {
     @Published var isAllRead: (Bool, Int) = (true, 0)
     
     init() {
-        // 既読かどうか
+        // 既読かどうか確認
         isRead()
     }
     
@@ -24,6 +24,13 @@ final class MainViewModel: ObservableObject {
     func isRead() {
         // 既読かどうか調べた結果を格納する
         isAllRead = notificationManager.getIsRead()
+    }
+    
+    // MARK: - permitNotification
+    @discardableResult
+    func permitNotification() -> Bool {
+        // 通知許可の取得
+        notificationManager.permitNotification()
     }
     
 }
@@ -97,7 +104,6 @@ func getFontSize(view: Views) -> Font {
 }
 
 // MARK: - getFrameSize
-// 使用しているiPhoneもしくはiPadのフレームを取得する
 func getFrameSize() -> (w: CGFloat, h: CGFloat) {
     // iPadかどうか判定
     if Int(UIScreen.main.bounds.width) >= 700 {

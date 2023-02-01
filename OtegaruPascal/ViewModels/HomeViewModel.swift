@@ -89,7 +89,6 @@ final class HomeViewModel: ObservableObject {
         isDrugNotificationDisplayed = UserDefaults.standard.bool(forKey: "isDrugNotificationDisplayed")
         
         // 更新開始
-        // FIXME: API呼び出し回数に制限があるため、何度も起動するテストではupdateWeather()を呼び出さない。本番時には呼び出すよう変更すること。
         updateWeather()
         updateBarometer()
         updateHelth()

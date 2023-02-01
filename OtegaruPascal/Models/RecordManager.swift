@@ -49,7 +49,7 @@ final class RecordManager: ObservableObject {
     
     // MARK: - addRecord
     // 記録を追加(体調の評価を受け取る)
-    func addRecord(evaluation: Int) {
+    func addRecord(evaluation: Int){
         // 記録の数が最大数を超えたら
         if recordArray.count > maxRecord {
             // 古い記録から削除する

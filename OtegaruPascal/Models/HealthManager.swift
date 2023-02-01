@@ -40,15 +40,33 @@ final class HealthManager: ObservableObject {
     // 予測された体調
     private var forecastFace: FaceType = .not
     // 体調に関する通知を出すかどうか
-    private var isHealthNotification = false
+    private var isHealthNotification = false {
+        didSet {
+            UserDefaults.standard.set(isHealthNotification, forKey: "isHealthNotification")
+        }
+    }
     
     // 更新のためのタイマー
     private var timer: Timer?
     
-    // 現在の時間(最初は必ず更新されるように-1にする) TODO: 通知の確認が終わり次第UserDefaultsで保存するようにする(Dateで保存を検討)
-    private var currentDay: Int = -1
-    private var currentHour: Int = -1
-    private var currentMin: Int = -1
+    // 現在の時間(最初は必ず更新されるように-1にする)
+    private var currentDay: Int = -1 {
+        didSet {
+            UserDefaults.standard.set(currentDay, forKey: "currentDay")
+        }
+    }
+    
+    private var currentHour: Int = -1 {
+        didSet {
+            UserDefaults.standard.set(currentHour, forKey: "currentHour")
+        }
+    }
+    
+    private var currentMin: Int = -1 {
+        didSet {
+            UserDefaults.standard.set(currentMin, forKey: "currentMin")
+        }
+    }
     
     // 経過時間の判定
     private var isDay = false
@@ -78,9 +96,21 @@ final class HealthManager: ObservableObject {
         if UserDefaults.standard.double(forKey: "healthLine") != 0.0 {
             self.healthLine = UserDefaults.standard.double(forKey: "healthLine")
         }
+        // 体調通知の状態を入れる
+        isHealthNotification = UserDefaults.standard.bool(forKey: "isHealthNotification")
         
-        // TODO: 現在の時間を入れる
-        
+        // 現在の時間を入れるuserDefaultsの初期値を-1にする(値が既に入っている場合は初期値は無視される)
+        UserDefaults.standard.register(defaults: ["currentDay" : -1, "currentHour" : -1, "currentMin" : -1])
+        // 現在の時間を入れる
+        if UserDefaults.standard.integer(forKey: "currentDay") != -1 {
+            self.currentDay = UserDefaults.standard.integer(forKey: "currentDay")
+        }
+        if UserDefaults.standard.integer(forKey: "currentHour") != -1 {
+            self.currentHour = UserDefaults.standard.integer(forKey: "currentHour")
+        }
+        if UserDefaults.standard.integer(forKey: "currentMin") != -1 {
+            self.currentMin = UserDefaults.standard.integer(forKey: "currentMin")
+        }
     }
     
     // MARK: - updateHealth
@@ -90,23 +120,23 @@ final class HealthManager: ObservableObject {
             // 時間確認
             self.updateTime()
             
+            // 1時間毎に更新
+            if self.isHour {
+                // 現在の体調を過去の体調に入れる
+                if let data = UserDefaults.standard.string(forKey: "face") {
+                    self.pastFace = FaceType(rawValue: data) ?? .not
+                }
+            }
+            
             // 1分毎に更新
             if self.isMin {
-                // 1時間経ったなら
-                if self.isHour {
-                    // 現在の体調を過去の体調に入れる
-                    if let data = UserDefaults.standard.string(forKey: "face") {
-                        self.pastFace = FaceType(rawValue: data) ?? .not
-                    }
-                }
-                
                 // 体調予想
                 self.forecastHealth()
                 
                 // 通知
                 self.healthNotification()
                 
-                print("| \(self.pastFace) | \(self.currentFace) | \(self.forecastFace) |")
+                print("表情： \(self.pastFace) > \(self.currentFace) > \(self.forecastFace)")
             }
             
             // 過去、現在、予測された体調を返す
@@ -130,7 +160,7 @@ final class HealthManager: ObservableObject {
     // MARK: - forecastHealth
     // 体調の予測を行う
     func forecastHealth() {
-        print("forecast!")
+        print("体調予測")
         // 過去の記録と現在の記録の差
         var pressureDifference: Double = 0.0
         // 過去の記録と現在の記録の差を求める
@@ -199,19 +229,19 @@ final class HealthManager: ObservableObject {
     // MARK: - healthNotification
     // 体調の予測を行った結果から、ユーザに合わせたローカル通知を出す
     private func healthNotification() {
-        print("isDay = \(isDay)")
+        print("体調予報の通知状態： \(isHealthNotification ? "待機" : "既出")")
         
         // 通知が出せる状態ならば実行
         if isHealthNotification {
             // 体調の悪化が予想されるなら
             if forecastFace == .bad || forecastFace == .worst {
                 // 体調悪化の通知を出す
-                notificationManager.permitNotification(type: .health, registeredDrug: settingManager.getRegisteredDrug())
+                notificationManager.makeNotification(type: .health, registeredDrug: settingManager.getRegisteredDrug())
                 
                 // アプリ側の許可がもらえたなら
                 if settingManager.getDrugNotification() {
                     // お薬通知を出す
-                    notificationManager.permitNotification(type: .drug,registeredDrug: settingManager.getRegisteredDrug())
+                    notificationManager.makeNotification(type: .drug,registeredDrug: settingManager.getRegisteredDrug())
                     // 画面にも通知を表示する
                     isDrugNotificationDisplayed = true
                     print("healthAndDrug")
@@ -305,14 +335,14 @@ final class HealthManager: ObservableObject {
             
             // アプリ側の許可ももらえたなら
             if settingManager.getRecordNotification() {
-                print("記録通知：ON")
+                print("記録通知： ON")
                 // 記録する時間になったら通知を送る(1日に1回)
                 if Int(settingManager.getRecordTime()) == hour {
-                    notificationManager.permitNotification(type: .record, registeredDrug: settingManager.getRegisteredDrug())
+                    notificationManager.makeNotification(type: .record, registeredDrug: settingManager.getRegisteredDrug())
                 }
                 
             } else {
-                print("記録通知：OFF")
+                print("記録通知： OFF")
             }
             
         } else {
@@ -346,22 +376,20 @@ final class HealthManager: ObservableObject {
         if self.currentHour == 0 {
             // 0時の場合は23時と比較する
             pressureDifference = self.pastPressure[23] - self.pastPressure[0]
-            
         } else {
             // 0時以外はそのまま
             pressureDifference = self.pastPressure[self.currentHour - 1] - self.pastPressure[self.currentHour]
-            
         }
         
-        if -0.5 < pressureDifference || pressureDifference < 0.5 {
+        if -0.5 < pressureDifference && pressureDifference < 0.5 {
             // 気圧があまり変わらない場合
             pressureArrow = .right
             
-        } else if pressureDifference < 0 {
+        } else if pressureDifference > 0 {
             // 気圧下がった場合
             pressureArrow = .down
             
-        } else if pressureDifference > 0 {
+        } else if pressureDifference < 0 {
             // 気圧が上がった場合
             pressureArrow = .up
         }

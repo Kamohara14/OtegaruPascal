@@ -74,12 +74,12 @@ final class BarometerManager: NSObject, ObservableObject, CLLocationManagerDeleg
             
             // 1時間経ったなら
             if self.healthManager.getIsHour() {
-                print("SetPastPressure!")
+                print("気圧を記録")
                 // 過去の気圧にセットする
                 self.healthManager.setPastPressure(adjustedPressure: adjustedPressure)
             }
             
-            print("| 海面更正気圧： \(adjustedPressure) hPa | 気温： \(self.weatherManager.getTemperature()) 度")
+            print("| 海面更正気圧： \(String(format: "%.5f", adjustedPressure)) hPa | 気温： \(String(format: "%.1f", self.weatherManager.getTemperature())) 度 |")
             
             // 調整した気圧の値を送る
             handler(adjustedPressure)

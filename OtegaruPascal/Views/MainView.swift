@@ -10,6 +10,9 @@ import SwiftUI
 struct MainView: View {
     // ViewModel
     @StateObject private var viewModel = MainViewModel()
+    // 初回起動かどうかを判断する
+    @AppStorage("isFirstLaunch") var isFirstLaunch = true
+    
     // View変更用のイニシャライザ
     init() {
         // NavigationView
@@ -89,6 +92,14 @@ struct MainView: View {
                     .padding(10)
                 } // ToolbarItemGroup
             } // toolbar
+            .alert(isPresented: $isFirstLaunch) {
+                Alert(title: Text("通知許可について"),
+                      message: Text("このアプリでは、以下の場合通知を使用します。\n\n・体調不良が予想された時\n・体調を記録する時間になった時\n\n「了解」を押すと通知許可の画面が表示されます。"),
+                      dismissButton: .default(Text("了解"), action: {
+                    // 通知の許可を取る
+                    viewModel.permitNotification()
+                }))
+            }
             
         } // NavigationView
         // iPadに対応する
