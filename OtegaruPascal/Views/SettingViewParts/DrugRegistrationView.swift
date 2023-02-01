@@ -38,19 +38,6 @@ struct DrugRegistrationView: View {
             Color(red: 242/255, green: 242/255, blue: 247/255).ignoresSafeArea()
             
             VStack {
-                // MARK: - 戻るボタン
-                HStack {
-                    Button{
-                        dismiss()
-                    } label: {
-                        Text("もどる")
-                            .font(fontSize)
-                    } // Button
-                    .padding([.top, .leading])
-                    
-                    Spacer()
-                } // HS
-                
                 Spacer()
                 
                 // MARK: - タイトル
@@ -138,7 +125,7 @@ struct DrugRegistrationView: View {
                             .padding(10)
                             .background(
                                 Rectangle()
-                                    .fill(Color.blue)
+                                    .fill(Color.green)
                                     .cornerRadius(10)
                             )
                     } // Button
@@ -151,6 +138,23 @@ struct DrugRegistrationView: View {
                 
                 Spacer()
                 Spacer()
+                
+                // MARK: - 戻るボタン
+                Button{
+                    dismiss()
+                } label: {
+                    Text("もどる")
+                        .font(fontSize)
+                        .foregroundColor(Color("Text_White"))
+                        .padding(.vertical, 15.0)
+                        .padding(.horizontal, UIScreen.main.bounds.width - 250)
+                        .background(
+                            Rectangle()
+                                .fill(Color.blue)
+                                .cornerRadius(20)
+                        )
+                } // Button
+                .padding(.bottom, 15.0)
                 
             } // VS
         } // ZS

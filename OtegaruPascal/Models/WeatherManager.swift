@@ -134,15 +134,16 @@ final class WeatherManager: ObservableObject {
             }
             .catch { error -> Empty<WeatherResponse, Never> in
                 // エラーを表示
-                print("")
+                print("-- ERROR --")
                 print(error)
+                print("-- END --")
                 self.errorSubject.send(error)
                 return Empty()
             }
             .map { $0 }
             .sink { response in
                 self.convertInput(response: response)
-                print(" -- JSON取得完了 -- ")
+                print(" -- GET JSON -- ")
             }
             .store(in: &cancellable)
     }
@@ -159,7 +160,7 @@ final class WeatherManager: ObservableObject {
                 // 天気を取得
                 let weather: WeatherInput = self.weatherInput.0
                 let weatherForcast: WeatherInput = self.weatherInput.1
-                print("2: \(self.weatherInput.0.main) -> \(self.weatherInput.1.main)")
+                print("天気： \(self.weatherInput.0.main) -> \(self.weatherInput.1.main)")
                 
                 // 天気を返す
                 handler(weather, weatherForcast)
@@ -175,7 +176,7 @@ final class WeatherManager: ObservableObject {
                     // 天気を取得
                     let weather: WeatherInput = self.weatherInput.0
                     let weatherForcast: WeatherInput = self.weatherInput.1
-                    print("2: \(self.weatherInput.0.main) -> \(self.weatherInput.1.main)")
+                    print("天気： \(self.weatherInput.0.main) -> \(self.weatherInput.1.main)")
                     
                     // 天気を返す
                     handler(weather, weatherForcast)
@@ -233,8 +234,6 @@ final class WeatherManager: ObservableObject {
         }
         // 天気を取得
         self.weatherInput = (currentInputs, forcastInputs)
-        // 天気を確認
-        print("1: \(currentInputs.main) -> \(forcastInputs.main)")
     }
     
     // MARK: - apply

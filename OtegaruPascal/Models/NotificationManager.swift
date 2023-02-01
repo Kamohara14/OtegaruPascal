@@ -35,6 +35,8 @@ final class NotificationManager: ObservableObject {
     }
     // 通知の最大数(20件まで)
     private let maxNotification: Int = 19
+    // 通知許可の有無
+    private var isPermitNotification = false
     
     // MARK: - init
     init() {
@@ -47,8 +49,11 @@ final class NotificationManager: ObservableObject {
     }
     
     // MARK: - permitNotification
-    // 通知の許可をとる
-    func permitNotification(type: NotificationType, registeredDrug: String) {
+    // 通知の許可をとる(返り値を使用しない場合がある)
+    @discardableResult
+    func permitNotification() -> Bool {
+        // 通知の許可状況
+        var permit = false
         // 通知のリセット
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
         // 通知を許諾するかどうか表示する(初使用時のみ)
@@ -60,27 +65,22 @@ final class NotificationManager: ObservableObject {
                 print("通知許諾エラー")
                 return
             }
-            
             // 通知を許可しているかどうか
-            if granted {
-                // 通知が許可されているなら通知を作成
-                self.makeNotification(type: type, registeredDrug: registeredDrug)
-                // 通知追加
-                self.addNotification(type: type)
-                
-            } else {
-                // 通知が許可されていない
-                print("通知は許可されていません")
-                
-            }
-            
+           permit = granted
             
         }
+        
+        return permit
     }
     
     // MARK: - makeNotification
     // ローカル通知を作成する
-    private func makeNotification(type: NotificationType, registeredDrug: String) {
+    func makeNotification(type: NotificationType, registeredDrug: String) {
+        // 通知許可の確認
+        if permitNotification() {
+            print("通知は許可されていません")
+            return
+        }
         // 通知タイミング(即時に通知する, 繰り返さない)
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
         // 通知の内容
@@ -121,6 +121,8 @@ final class NotificationManager: ObservableObject {
         let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
         //リクエスト実行
         UNUserNotificationCenter.current().add(request)
+        // 通知追加
+        addNotification(type: type)
     }
     
     // MARK: - addNotification

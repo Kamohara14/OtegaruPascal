@@ -23,7 +23,7 @@ struct HealthFaceDescriptionView: View {
     var body: some View {
         ZStack {
             // 背景色
-            Color(red: 0.9, green: 0.9, blue: 0.9, opacity: 0.9)
+            Color(red: 0.9, green: 0.9, blue: 0.9, opacity: 0.97)
             
             VStack {
                 // 通知を閉じるためのボタン
@@ -32,6 +32,7 @@ struct HealthFaceDescriptionView: View {
                     Button {
                         // 解説を閉じる
                         isPresented = false
+                        
                     } label: {
                         Image(systemName: "xmark.circle")
                             .resizable()
