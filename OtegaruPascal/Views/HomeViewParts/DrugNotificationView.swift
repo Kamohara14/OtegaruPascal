@@ -25,7 +25,7 @@ struct DrugNotificationView: View {
             VStack {
                 Spacer()
                 
-                // お薬通知のタイトル
+                // MARK: - お薬通知のタイトル
                 HStack {
                     Spacer()
                     
@@ -44,7 +44,7 @@ struct DrugNotificationView: View {
                 HStack {
                     Spacer()
                     
-                    // 飲んだボタン
+                    // MARK: - 飲んだボタン
                     Button {
                         // 通知を消す処理
                         viewModel.isDrugNotificationDisplayed = false

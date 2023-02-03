@@ -20,13 +20,14 @@ struct PastRecordView: View {
     var body: some View {
         VStack {
             HStack {
+                // MARK: - 過去の記録
                 Text("過去の記録：\(viewModel.recordArray.count)件")
                 .foregroundColor(Color("Text_MainColor"))
                 .font(fontSize)
                 
                 Spacer()
                 
-                // 削除ボタン
+                // MARK: - 削除ボタン
                 Button {
                     // アラート表示
                     self.recordDeleteAlert = true
@@ -48,6 +49,7 @@ struct PastRecordView: View {
             
             // 区切り線
             Divider()
+            // MARK: - 記録一覧
             // 記録の有無を確認
             if viewModel.recordArray.count == 0 {
                 // 記録がないなら

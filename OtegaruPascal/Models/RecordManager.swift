@@ -13,7 +13,7 @@ struct Record: Identifiable, Codable {
     // 記録された日付
     let date: String
     // 体調の評価(4段階)
-    let evaluation: Int
+    let evaluation: String
 }
 
 final class RecordManager: ObservableObject {
@@ -69,8 +69,18 @@ final class RecordManager: ObservableObject {
         // フォーマットした日付
         let fDate = formatter.string(from: date)
         
+        let evalStr: String
+        switch evaluation {
+        case 1: evalStr = "悪い"
+        case 2: evalStr = "やや悪い"
+        case 3: evalStr = "通常通り"
+        case 4: evalStr = "良い"
+        default:
+            evalStr = "エラー"
+        }
+        
         // 配列に入れる
-        recordArray.insert(Record(date: fDate, evaluation: evaluation), at: 0)
+        recordArray.insert(Record(date: fDate, evaluation: evalStr), at: 0)
         
         // 評価を参考に各ユーザ毎に通知のチューニングをする
         healthManager.changeHealthLine(evaluation: evaluation)

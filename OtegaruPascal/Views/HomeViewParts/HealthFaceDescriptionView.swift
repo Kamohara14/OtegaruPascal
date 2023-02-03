@@ -26,7 +26,7 @@ struct HealthFaceDescriptionView: View {
             Color(red: 0.9, green: 0.9, blue: 0.9, opacity: 0.97)
             
             VStack {
-                // 通知を閉じるためのボタン
+                // MARK: - 通知を閉じるためのボタン
                 HStack {
                     // 閉じるボタン
                     Button {
@@ -47,7 +47,7 @@ struct HealthFaceDescriptionView: View {
                 // 区切り線
                 Divider()
                 
-                // 体調は良好
+                // MARK: - 体調は良好
                 HStack {
                     Image("Face_Good")
                         .resizable()
@@ -60,7 +60,7 @@ struct HealthFaceDescriptionView: View {
                         .fontWeight(.medium)
                 }
                 
-                // 体調は通常通り
+                // MARK: - 体調は通常通り
                 HStack {
                     Image("Face_Normal")
                         .resizable()
@@ -73,7 +73,7 @@ struct HealthFaceDescriptionView: View {
                         .fontWeight(.medium)
                 }
                 
-                // 体調に注意
+                // MARK: - 体調に注意
                 HStack {
                     Image("Face_Bad")
                         .resizable()
@@ -86,7 +86,7 @@ struct HealthFaceDescriptionView: View {
                         .fontWeight(.medium)
                 }
                 
-                // 体調が悪くなる恐れあり
+                // MARK: - 体調が悪くなる恐れあり
                 HStack {
                     Image("Face_Worst")
                         .resizable()

@@ -13,5 +13,10 @@
 	</array>
 	<key>OpenWeatherAPIKey</key>
 	<string>$(OPENWEATHER_APIKEY)</string>
+	<key>UILaunchScreen</key>
+	<dict>
+		<key>UIColorName</key>
+		<string>Background_App</string>
+	</dict>
 </dict>
 </plist>

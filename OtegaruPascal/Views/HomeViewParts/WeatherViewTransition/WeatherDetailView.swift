@@ -124,15 +124,18 @@ struct detailView: View {
     
     var body: some View {
         HStack(alignment: .top) {
+            // MARK: - 天気・UV指数・風速
             VStack(alignment: .leading) {
                 Text(description)
                     .foregroundColor(Color("Text_Black"))
                     .font(fontSize)
                     .padding()
+                
                 Text(uvi)
                     .foregroundColor(Color("Text_Black"))
                     .font(fontSize)
                     .padding()
+                
                 Text(windSpeed)
                     .foregroundColor(Color("Text_Black"))
                     .font(fontSize)
@@ -140,21 +143,25 @@ struct detailView: View {
                 
             } // HS
             
+            // MARK: - 気温・曇り度・降水確率
             VStack(alignment: .leading) {
                 Text(temp)
                     .foregroundColor(Color("Text_Black"))
                     .font(fontSize)
                     .padding()
+                
                 Text(clouds)
                     .foregroundColor(Color("Text_Black"))
                     .font(fontSize)
                     .padding()
+                
                 Text(pop)
                     .foregroundColor(Color("Text_Black"))
                     .font(fontSize)
                     .padding()
             } // VS
             
+            // MARK: - 湿度
             Text(humidity)
                 .foregroundColor(Color("Text_Black"))
                 .font(fontSize)

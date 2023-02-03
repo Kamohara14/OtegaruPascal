@@ -10,7 +10,6 @@ import SwiftUI
 struct NotificationView: View {
     // ViewModel
     @StateObject private var viewModel = NotificationViewModel()
-    
     // 通知の更新用
     @ObservedObject var mainViewModel: MainViewModel
     
