@@ -28,6 +28,7 @@ struct DescriptionItemView: View {
             Color("Background_App").ignoresSafeArea(edges: .bottom)
             
             VStack {
+                // MARK: - 解説内容のタイトル
                 HStack {
                     Text(title)
                         .foregroundColor(Color("Text_MainColor"))
@@ -36,6 +37,7 @@ struct DescriptionItemView: View {
                 } // HS
                 .padding()
                 
+                // MARK: - 解説内容
                 ScrollView {
                     VStack {
                         Text(text)

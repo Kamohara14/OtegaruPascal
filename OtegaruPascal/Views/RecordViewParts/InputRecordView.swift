@@ -34,7 +34,7 @@ struct InputRecordView: View {
                             .padding()
                         
                         Button {
-                            // 評価：とても良くない
+                            // MARK: - 評価：悪い
                             viewModel.selectedButton(buttonNum: .Button1)
                             
                         } label: {
@@ -55,7 +55,7 @@ struct InputRecordView: View {
                             .padding()
                         
                         Button {
-                            // 評価：良くない
+                            // MARK: - 評価：やや悪い
                             viewModel.selectedButton(buttonNum: .Button2)
                             
                         } label: {
@@ -76,7 +76,7 @@ struct InputRecordView: View {
                             .padding()
                         
                         Button {
-                            // 評価：通常
+                            // MARK: - 評価：通常通り
                             viewModel.selectedButton(buttonNum: .Button3)
                             
                         } label: {
@@ -97,7 +97,7 @@ struct InputRecordView: View {
                             .padding()
                         
                         Button {
-                            // 評価：良好
+                            // MARK: - 評価：良い
                             viewModel.selectedButton(buttonNum: .Button4)
                             
                         } label: {

@@ -7,9 +7,6 @@
 
 import Foundation
 
-// URL
-// https://api.openweathermap.org/data/2.5/onecall?lat=(緯度)&lon=(経度)&exclude=current,minutely,daily&units=metric&lang=ja&appid=(APIKey)
-
 // MARK: - Weather
 struct WeatherResponse: Codable {
     // 緯度経度

@@ -8,7 +8,6 @@
 import Foundation
 
 final class DescriptionViewModel: ObservableObject {
-    // MARK: - 解説
     // 解説の種類
     enum DescriptionText {
     case appUsage // このアプリの使い方

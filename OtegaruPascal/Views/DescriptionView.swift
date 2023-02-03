@@ -38,6 +38,7 @@ struct DescriptionView: View {
                         // 区切り線
                         Divider()
                         
+                        // MARK: - 解説欄
                         // 解説の数だけ繰り返す
                         ForEach (0..<viewModel.descriptionArray.count, id: \.self) { num in
                             // 配列から解説を取り出す
@@ -47,13 +48,13 @@ struct DescriptionView: View {
                                 title: description.title,
                                 text: viewModel.getDescription(type: description.text))) {
                                     HStack {
-                                        // 解説のタイトル
+                                        // MARK: - 解説のタイトル
                                         Text(description.title)
                                             .foregroundColor(Color("Text_Black"))
                                             .font(fontSize)
                                         
                                         Spacer()
-                                        
+                                        // MARK: - 解説の遷移を表す画像
                                         Image(systemName: "chevron.right")
                                             .foregroundColor(Color("Text_MainColor"))
                                     } // HS
@@ -72,6 +73,7 @@ struct DescriptionView: View {
                     
                 } // VS
             } // ZS
+            // MARK: - タイトル
             .navigationTitle("解説一覧")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarHidden(true)

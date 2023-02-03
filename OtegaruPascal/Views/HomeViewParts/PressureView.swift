@@ -32,11 +32,13 @@ struct PressureView: View {
             Color("Background_Elements")
             HStack {
                 Spacer()
+                // MARK: - 現在の気圧の数値
                 Text(viewModel.pressureString)
                     .foregroundColor(Color("Text_Black"))
                     .font(.system(size: isPad ? 80 : 40))
                     .padding()
                 
+                // MARK: - 現在の気圧の傾向(上昇・下降・変化なし)
                 Image(systemName: viewModel.pressureArrow.type.rawValue)
                     .resizable()
                     .scaledToFit()

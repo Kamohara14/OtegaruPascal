@@ -34,21 +34,6 @@ final class RecordViewModel: ObservableObject {
         recordArray = recordManager.getRecord()
     }
     
-    // MARK: - addRecord
-    func addRecord() {
-        // 配列に記録を追加する
-        recordManager.addRecord(evaluation: evaluation)
-        // 記録の更新
-        recordArray = recordManager.getRecord()
-        // 選択したボタンの初期化
-        evaluationButton = (
-            (Color("Text_MainColor"), Color("Button_Record")),
-            (Color("Text_MainColor"), Color("Button_Record")),
-            (Color("Text_MainColor"), Color("Button_Record")),
-            (Color("Text_MainColor"), Color("Button_Record"))
-        )
-    }
-    
     // MARK: - selectedButton
     // 選択されたボタンの処理
     func selectedButton(buttonNum: Evaluation) {
@@ -100,6 +85,21 @@ final class RecordViewModel: ObservableObject {
         
         // 選択し終わったらボタン表示
         isSave = true
+    }
+    
+    // MARK: - addRecord
+    func addRecord() {
+        // 配列に記録を追加する
+        recordManager.addRecord(evaluation: evaluation)
+        // 記録の更新
+        recordArray = recordManager.getRecord()
+        // 選択したボタンの初期化
+        evaluationButton = (
+            (Color("Text_MainColor"), Color("Button_Record")),
+            (Color("Text_MainColor"), Color("Button_Record")),
+            (Color("Text_MainColor"), Color("Button_Record")),
+            (Color("Text_MainColor"), Color("Button_Record"))
+        )
     }
     
     // MARK: - deleteRecord

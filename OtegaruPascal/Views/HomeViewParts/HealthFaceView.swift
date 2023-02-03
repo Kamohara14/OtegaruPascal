@@ -36,7 +36,7 @@ struct HealthFaceView: View {
             VStack {
                 HStack {
                     Spacer()
-                    // 解説ボタン
+                    // MARK: - 解説ボタン
                     Button {
                         // 解説を表示する
                         viewModel.isFaceDescriptionDisplayed = true
@@ -53,7 +53,7 @@ struct HealthFaceView: View {
                     
                 }
                 HStack {
-                    // 予測された過去の体調
+                    // MARK: - 予測された過去の体調
                     Image(viewModel.pastFace.rawValue)
                         .resizable()
                         .scaledToFit()
@@ -64,7 +64,7 @@ struct HealthFaceView: View {
                         .scaledToFit()
                         .frame(maxWidth: width / 6, maxHeight: width / 9)
                     
-                    // 予測された現在の体調
+                    // MARK: - 予測された現在の体調
                     Image(viewModel.currentFace.rawValue)
                         .resizable()
                         .scaledToFit()
@@ -75,15 +75,15 @@ struct HealthFaceView: View {
                         .scaledToFit()
                         .frame(maxWidth: width / 6, maxHeight: width / 9)
                     
-                    // 予測された未来の体調
+                    // MARK: - 予測された未来の体調
                     Image(viewModel.forecastFace.rawValue)
                         .resizable()
                         .scaledToFit()
                         .frame(maxWidth: width / 5, maxHeight: width / 5)
                     
                 } // HS
+                // MARK: - 一言解説
                 HStack {
-                    // 一言解説
                     Text(viewModel.description.rawValue)
                         .foregroundColor(Color("Text_Black"))
                         .font(.system(size: isPad ? 30 : 15))
