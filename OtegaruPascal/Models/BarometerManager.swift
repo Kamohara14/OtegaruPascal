@@ -45,7 +45,7 @@ final class BarometerManager: NSObject, ObservableObject, CLLocationManagerDeleg
         locationManager.requestWhenInUseAuthorization()
         
         // メインスレッドで呼び出さない
-        DispatchQueue.global().sync {
+        DispatchQueue.global().async {
             // 位置情報が使用可能なら
             if CLLocationManager.locationServicesEnabled() {
                 // バックグラウンドで使用するかどうか
