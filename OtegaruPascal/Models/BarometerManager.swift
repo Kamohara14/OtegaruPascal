@@ -44,13 +44,16 @@ final class BarometerManager: NSObject, ObservableObject, CLLocationManagerDeleg
         // ユーザに位置情報の使用許可を取る
         locationManager.requestWhenInUseAuthorization()
         
-        // 位置情報が使用可能なら
-        if CLLocationManager.locationServicesEnabled() {
-            // バックグラウンドで使用するかどうか
-            locationManager.allowsBackgroundLocationUpdates = true
-            // 位置情報の取得を開始する
-            locationManager.startUpdatingLocation()
-            
+        // メインスレッドで呼び出さない
+        DispatchQueue.global().async {
+            // 位置情報が使用可能なら
+            if CLLocationManager.locationServicesEnabled() {
+                // バックグラウンドで使用するかどうか
+                self.locationManager.allowsBackgroundLocationUpdates = true
+                // 位置情報の取得を開始する
+                self.locationManager.startUpdatingLocation()
+                
+            }
         }
     }
     
