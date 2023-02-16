@@ -129,7 +129,7 @@ final class HomeViewModel: ObservableObject {
             // 現在の気圧を文字列に変換し、表示用に整える
             self.pressureString = String(format: "%.1f", pressure) + "hPa"
             // 過去の気圧から気圧が上がっているかどうかを確認する
-            self.pressureArrow = PressureArrowIcon(type: self.healthManager.getPressureArrow())
+            self.pressureArrow = PressureArrowIcon(type: self.healthManager.getPressureArrow(pressure: pressure))
             // 現在の体調の解説を取得
             self.description = self.healthManager.getDescription()
         }

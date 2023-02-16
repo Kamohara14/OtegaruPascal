@@ -367,7 +367,7 @@ final class HealthManager: ObservableObject {
     
     // MARK: - getPressureArrow
     // 気圧表示の横の矢印を気圧に合わせて調整する
-    func getPressureArrow() -> PressureArrowType {
+    func getPressureArrow(pressure: Double) -> PressureArrowType {
         // 過去の記録と現在の記録の差
         var pressureDifference: Double
         // 気圧変化を表す矢印
@@ -375,13 +375,13 @@ final class HealthManager: ObservableObject {
         
         if self.currentHour == 0 {
             // 0時の場合は23時と比較する
-            pressureDifference = self.pastPressure[23] - self.pastPressure[0]
+            pressureDifference = self.pastPressure[23] - pressure
         } else {
             // 0時以外はそのまま
-            pressureDifference = self.pastPressure[self.currentHour - 1] - self.pastPressure[self.currentHour]
+            pressureDifference = self.pastPressure[self.currentHour - 1] - pressure
         }
         
-        if -0.5 < pressureDifference && pressureDifference < 0.5 {
+        if -1 <= pressureDifference && pressureDifference <= 1 {
             // 気圧があまり変わらない場合
             pressureArrow = .right
             
@@ -392,6 +392,7 @@ final class HealthManager: ObservableObject {
         } else if pressureDifference < 0 {
             // 気圧が上がった場合
             pressureArrow = .up
+            
         }
         
         return pressureArrow
