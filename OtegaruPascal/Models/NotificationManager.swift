@@ -75,7 +75,7 @@ final class NotificationManager: ObservableObject {
     
     // MARK: - makeNotification
     // ローカル通知を作成する
-    func makeNotification(type: NotificationType, registeredDrug: String) {
+    func makeNotification(type: NotificationType, registeredDrug: String, pressureEffect: String) {
         // 通知許可の確認
         if permitNotification() {
             print("通知は許可されていません")
@@ -91,7 +91,7 @@ final class NotificationManager: ObservableObject {
         switch type {
         case .health:
             // 体調予想の通知
-            content.title = "体調不良が予想されます"
+            content.title = "体調不良が予想されます" + pressureEffect
             identifier = "notification_health"
             
         case .drug:
@@ -122,12 +122,12 @@ final class NotificationManager: ObservableObject {
         //リクエスト実行
         UNUserNotificationCenter.current().add(request)
         // 通知追加
-        addNotification(type: type)
+        addNotification(type: type, pressureEffect: pressureEffect)
     }
     
     // MARK: - addNotification
     // 通知画面に通知を追加する
-    private func addNotification(type: NotificationType) {
+    private func addNotification(type: NotificationType, pressureEffect: String) {
         // 通知の数が最大数を超えたら
         if notificationArray.count > maxNotification {
             // 古い通知から削除する
@@ -152,7 +152,7 @@ final class NotificationManager: ObservableObject {
         
         switch type {
         case .health:
-            title = "体調不良が予想されます"
+            title = "体調不良が予想されます" + pressureEffect
         case .drug:
             title = "お薬を飲みましょう"
         case .record:

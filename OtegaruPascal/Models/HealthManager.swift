@@ -235,13 +235,20 @@ final class HealthManager: ObservableObject {
         if isHealthNotification {
             // 体調の悪化が予想されるなら
             if forecastFace == .bad || forecastFace == .worst {
+                // 影響の大きさ
+                let pressureEffect: String
+                if forecastFace == .bad {
+                    pressureEffect = "：注意"
+                } else {
+                    pressureEffect = "：警戒"
+                }
                 // 体調悪化の通知を出す
-                notificationManager.makeNotification(type: .health, registeredDrug: settingManager.getRegisteredDrug())
+                notificationManager.makeNotification(type: .health, registeredDrug: settingManager.getRegisteredDrug(), pressureEffect: pressureEffect)
                 
                 // アプリ側の許可がもらえたなら
                 if settingManager.getDrugNotification() {
                     // お薬通知を出す
-                    notificationManager.makeNotification(type: .drug,registeredDrug: settingManager.getRegisteredDrug())
+                    notificationManager.makeNotification(type: .drug,registeredDrug: settingManager.getRegisteredDrug(), pressureEffect: "")
                     // 画面にも通知を表示する
                     isDrugNotificationDisplayed = true
                     print("healthAndDrug")
@@ -338,7 +345,7 @@ final class HealthManager: ObservableObject {
                 print("記録通知： ON")
                 // 記録する時間になったら通知を送る(1日に1回)
                 if Int(settingManager.getRecordTime()) == hour {
-                    notificationManager.makeNotification(type: .record, registeredDrug: settingManager.getRegisteredDrug())
+                    notificationManager.makeNotification(type: .record, registeredDrug: settingManager.getRegisteredDrug(), pressureEffect: "")
                 }
                 
             } else {
