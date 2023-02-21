@@ -59,6 +59,7 @@ struct DrugRegistrationView: View {
                 TextField("お薬の名前", text: $name)
                     .foregroundColor(Color("Text_Black"))
                     .font(fontSize)
+                    .frame(width: UIScreen.main.bounds.width / 1.3)
                     .padding()
                     .background(Color.white)
                     .padding()
@@ -146,8 +147,8 @@ struct DrugRegistrationView: View {
                     Text("もどる")
                         .font(fontSize)
                         .foregroundColor(Color("Text_White"))
-                        .padding(.vertical, 15.0)
-                        .padding(.horizontal, UIScreen.main.bounds.width - 250)
+                        .frame(width: UIScreen.main.bounds.width / 1.3)
+                        .padding()
                         .background(
                             Rectangle()
                                 .fill(Color.blue)

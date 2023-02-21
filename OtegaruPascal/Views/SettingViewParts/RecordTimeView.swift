@@ -45,6 +45,7 @@ struct RecordTimeView: View {
                     .font(fontSize),
                        label: { EmptyView() }
                 )
+                .frame(width: UIScreen.main.bounds.width / 1.3)
                 .padding()
                 
                 // MARK: - 　お知らせ時間表示
@@ -63,8 +64,8 @@ struct RecordTimeView: View {
                     Text("もどる")
                         .font(fontSize)
                         .foregroundColor(Color("Text_White"))
-                        .padding(.vertical, 15.0)
-                        .padding(.horizontal, UIScreen.main.bounds.width - 250)
+                        .frame(width: UIScreen.main.bounds.width / 1.3)
+                        .padding()
                         .background(
                             Rectangle()
                                 .fill(Color.blue)
