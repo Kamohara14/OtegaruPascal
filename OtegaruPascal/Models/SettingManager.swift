@@ -56,10 +56,10 @@ final class SettingManager: ObservableObject {
         registeredDrug = UserDefaults.standard.string(forKey: "registeredDrug") ?? ""
         // 記録通知を入れる
         isRecordNotification = UserDefaults.standard.object(forKey: "isRecord") as? Bool ?? true
-        // 記録をつける時間を入れる(初回起動時は保存されたデータが存在しないため、代入しない)
-        if UserDefaults.standard.double(forKey: "recordTime") != 0.0 {
-            recordTime = UserDefaults.standard.double(forKey: "recordTime")
-        }
+        // 記録をつける時間を入れるuserDefaultsの初期値を18.0にする(値が既に入っている場合は初期値は無視される)
+        UserDefaults.standard.register(defaults: ["recordTime" : 18.0])
+        // 記録をつける時間を入れる
+        recordTime = UserDefaults.standard.double(forKey: "recordTime")
     }
     
     // MARK: - DrugNotification
