@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct NotificationView: View {
+    // 戻るボタン
+    @Environment(\.dismiss) var dismiss
+    
     // ViewModel
     @StateObject private var viewModel = NotificationViewModel()
     // 通知の更新用
@@ -57,6 +60,21 @@ struct NotificationView: View {
             }
             
         }  // ZS
+        // タイトル
+        .navigationTitle("通知")
+        // 戻るボタンを非表示に
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            // toolbarの左側に代わりの戻るボタンを追加
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button{
+                    dismiss()
+                } label: {
+                    Image(systemName: "chevron.left")
+                        .foregroundColor(.white)
+                } // Button
+            } // ToolbarItem
+        } // toolbar
         
     } // body
 }
