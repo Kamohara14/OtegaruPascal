@@ -15,11 +15,17 @@ struct MainView: View {
     
     // View変更用のイニシャライザ
     init() {
-        // NavigationView
+        // NavigationStack
+        // NavigationBarのappearanceを設定
+        let appearance = UINavigationBarAppearance()
         // 背景の色
-        UINavigationBar.appearance().backgroundColor = UIColor(named: "Background_NavigationView")
-        // backの色
-        UINavigationBar.appearance().tintColor = .white
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = UIColor(named: "Background_NavigationView")
+        // タイトルの色
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        // 反映
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
         
         // TabView
         // TabViewの背景色の設定
@@ -32,7 +38,7 @@ struct MainView: View {
     }
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ZStack {
                 VStack {
                     tabView()
@@ -40,7 +46,6 @@ struct MainView: View {
                 } // VS
                 
             } // ZS
-            .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 // MARK: - アプリロゴ
@@ -101,7 +106,7 @@ struct MainView: View {
                 }))
             }
             
-        } // NavigationView
+        } // NavigationStack
         // iPadに対応する
         .navigationViewStyle(.stack)
         

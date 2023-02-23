@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct DescriptionItemView: View {
+    // 戻るボタン
+    @Environment(\.dismiss) var dismiss
+    
     // 解説
     let title: String
     let text: String
@@ -53,6 +56,22 @@ struct DescriptionItemView: View {
             } // VS
             
         } // ZS
+        // タイトル
+        .navigationTitle("解説")
+        // 戻るボタンを非表示に
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            // toolbarの左側に代わりの戻るボタンを追加
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button{
+                    dismiss()
+                } label: {
+                    Image(systemName: "chevron.left")
+                        .foregroundColor(.white)
+                } // Button
+            } // ToolbarItem
+        } // toolbar
+        
     }
 }
 

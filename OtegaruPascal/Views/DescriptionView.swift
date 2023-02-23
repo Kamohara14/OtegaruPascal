@@ -19,7 +19,7 @@ struct DescriptionView: View {
     }
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ZStack {
                 // 背景色
                 Color("Background_NavigationView").ignoresSafeArea(edges: .top)
@@ -73,12 +73,7 @@ struct DescriptionView: View {
                     
                 } // VS
             } // ZS
-            // MARK: - タイトル
-            .navigationTitle("解説一覧")
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationBarHidden(true)
-            
-        } // NavigationView
+        } // NavigationStack
         // iPadに対応する
         .navigationViewStyle(.stack)
     }
